@@ -215,25 +215,6 @@
         <div class="flex-1 flex flex-col items-center justify-center px-4 relative">
             <div id="qrReader" class="w-full max-w-sm rounded-2xl overflow-hidden shadow-2xl border-2 border-amber-400 bg-slate-900"></div>
             <p class="text-white/80 text-xs mt-4 text-center">ส่องกล้องไปที่ QR Code ตามจุดกิจกรรมต่าง ๆ เพื่อสะสม 5 คะแนน</p>
-            
-            <!-- Quick Simulator Option inside Scanner -->
-            <div class="mt-6 w-full max-w-sm">
-                <p class="text-slate-400 text-xs text-center mb-2">หรือทดลองสแกนจุดจำลอง (สำหรับทดสอบระบบ)</p>
-                <div class="grid grid-cols-2 gap-2">
-                    <button onclick="simulateScan('STATION_01', 'จุดที่ 1: ซุ้มเฉลิมพระเกียรติ')" class="bg-white/10 hover:bg-white/20 text-white text-xs py-2 px-3 rounded-lg border border-white/10 text-left truncate">
-                        📍 จุดที่ 1: ซุ้มเฉลิมพระเกียรติ
-                    </button>
-                    <button onclick="simulateScan('STATION_02', 'จุดที่ 2: นิทรรศการในความทรงจำ')" class="bg-white/10 hover:bg-white/20 text-white text-xs py-2 px-3 rounded-lg border border-white/10 text-left truncate">
-                        📍 จุดที่ 2: นิทรรศการความทรงจำ
-                    </button>
-                    <button onclick="simulateScan('STATION_03', 'จุดที่ 3: โซนวิถีเกษตรไทย')" class="bg-white/10 hover:bg-white/20 text-white text-xs py-2 px-3 rounded-lg border border-white/10 text-left truncate">
-                        📍 จุดที่ 3: โซนวิถีเกษตรไทย
-                    </button>
-                    <button onclick="simulateScan('STATION_04', 'จุดที่ 4: เวทีกิจกรรมกลาง')" class="bg-white/10 hover:bg-white/20 text-white text-xs py-2 px-3 rounded-lg border border-white/10 text-left truncate">
-                        📍 จุดที่ 4: เวทีกิจกรรมกลาง
-                    </button>
-                </div>
-            </div>
         </div>
 
         <div class="p-4 text-center">
@@ -492,7 +473,7 @@
             points: 0,
             scannedStations: {}, // { stationId: { name, timestamp } }
             redemptions: [], // List of redeemed rewards
-            webAppUrl: localStorage.getItem('museum_webapp_url') || ' https://script.google.com/macros/s/AKfycbyZrKC-fCdcv7AnVe9rfQkvP0Zyy3wBwOsAFIrEDPAjSBwLiyvP6IE57M-EW3WNRcPZ0A/exec'
+            webAppUrl: localStorage.getItem('museum_webapp_url') || 'https://script.google.com/macros/s/AKfycbyZrKC-fCdcv7AnVe9rfQkvP0Zyy3wBwOsAFIrEDPAjSBwLiyvP6IE57M-EW3WNRcPZ0A/exec'
         };
 
         let html5QrCode = null;
@@ -526,12 +507,21 @@
             }
         }
 
-        // Show Admin button if URL contains ?admin=true or ?admin=1234
+        // Show Admin button if URL contains ?admin=true or ?admin=0615
         function checkAdminAccess() {
             const urlParams = new URLSearchParams(window.location.search);
-            if (urlParams.get('admin') === 'true' || urlParams.get('admin') === '1234') {
+            if (urlParams.get('admin') === 'true' || urlParams.get('admin') === '0615') {
                 const adminBtn = document.getElementById('adminBtn');
                 if (adminBtn) adminBtn.classList.remove('hidden');
+            }
+        }
+
+        function loadAppState() {
+            const saved = localStorage.getItem('museum_point_app_data');
+            if (saved) {
+                try {
+                    appState = Object.assign(appState, JSON.parse(saved));
+                } catch(e){}
             }
         }
 
@@ -697,12 +687,6 @@
             // Ignore frame errors
         }
 
-        // Simulate scanning directly
-        function simulateScan(stationId, stationName) {
-            const payload = `MUSEUM:${stationId}:${stationName}`;
-            processScanData(payload);
-        }
-
         // Check URL Query params e.g. ?point=STATION_01
         function checkUrlScanParams() {
             const urlParams = new URLSearchParams(window.location.search);
@@ -860,7 +844,7 @@
 
         // --- GOOGLE SHEETS INTEGRATION ---
         function sendDataToGoogleSheet(data) {
-            const url = appState.webAppUrl || localStorage.getItem('museum_webapp_url') || ' https://script.google.com/macros/s/AKfycbyZrKC-fCdcv7AnVe9rfQkvP0Zyy3wBwOsAFIrEDPAjSBwLiyvP6IE57M-EW3WNRcPZ0A/exec';
+            const url = appState.webAppUrl || localStorage.getItem('museum_webapp_url') || 'https://script.google.com/macros/s/AKfycbyZrKC-fCdcv7AnVe9rfQkvP0Zyy3wBwOsAFIrEDPAjSBwLiyvP6IE57M-EW3WNRcPZ0A/exec';
             if (!url) {
                 console.log("No Google Web App URL configured. Data saved locally.");
                 return;
@@ -886,7 +870,7 @@
         // --- ADMIN QR CODE GENERATOR ---
         function openAdminModal() {
             const pin = prompt("กรุณากรอกรหัสผ่านผู้ดูแลระบบ (Admin PIN):");
-            if (pin === "1234") {
+            if (pin === "0615") {
                 document.getElementById('adminModal').classList.remove('hidden');
             } else if (pin !== null) {
                 showCustomAlert("รหัสผ่านไม่ถูกต้อง! เฉพาะเจ้าหน้าที่เท่านั้น", "error");
@@ -919,20 +903,6 @@
             document.getElementById('qrOutputContainer').classList.remove('hidden');
         }
 
-        // RESET SYSTEM
-        function resetDataPrompt() {
-            if (confirm("คุณต้องการรีเซ็ตคะแนนและประวัติทั้งหมดใช่หรือไม่? (สำหรับเริ่มสะสมใหม่)")) {
-                appState.points = 0;
-                appState.scannedStations = {};
-                appState.redemptions = [];
-                saveAppState();
-                renderDashboard();
-                renderHistory();
-                renderRewards();
-                showCustomAlert("รีเซ็ตข้อมูลเรียบร้อยแล้ว", "info");
-            }
-        }
-
         // Helper alert function
         function showCustomAlert(message, type = "info") {
             const bg = type === 'success' ? 'bg-emerald-600' : type === 'warning' ? 'bg-amber-600' : type === 'error' ? 'bg-red-600' : 'bg-slate-800';
@@ -953,4 +923,3 @@
     </script>
 </body>
 </html>
-
