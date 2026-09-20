@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Museum Point - งานมหกรรมในความทรงจำ</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts: Kanit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- HTML5 QR Code Scanner Library -->
+    <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+
+    <!-- Canvas Confetti Library -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        kanit: ['Kanit', 'sans-serif'],
+                    },
+                    colors: {
+                        museum: {
+                            blue: '#0284c7',
+                            darkblue: '#0369a1',
+                            yellow: '#f59e0b',
+                            lightyellow: '#fef3c7',
+                            bg: '#f0f9ff'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Kanit', sans-serif;
+            background-color: #f1f5f9;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .bg-pattern {
+            background-color: #0284c7;
+            background-image: radial-gradient(#ffffff 1.5px, transparent 1.5px), radial-gradient(#ffffff 1.5px, #0284c7 1.5px);
+            background-size: 30px 30px;
+            background-position: 0 0, 15px 15px;
+            opacity: 0.95;
+        }
+        .yellow-gradient {
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+        }
+        .blue-gradient {
+            background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+        }
+        .gold-glow {
+            box-shadow: 0 4px 20px -2px rgba(245, 158, 11, 0.45);
+        }
+        .card-shadow {
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="flex justify-center items-start min-h-screen text-slate-800">
+
+    <div id="app" class="w-full max-w-md bg-white min-h-screen shadow-2xl relative flex flex-col pb-12">
+        
+        <!-- Header Banner -->
+        <header class="bg-pattern text-white pt-6 pb-12 px-5 rounded-b-[2.5rem] relative shadow-lg">
+            <div class="flex items-center justify-between mb-3">
+                <div class="flex items-center space-x-3">
+                    <div class="w-11 h-11 bg-white rounded-full flex items-center justify-center text-museum-blue shadow-md">
+                        <i class="fa-solid fa-landmark text-xl"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs font-light text-sky-100">พิพิธภัณฑ์การเกษตรฯ</p>
+                        <!-- Secret Tap 5 times to open Admin prompt -->
+                        <h1 onclick="handleSecretAdminTap()" class="text-lg font-bold leading-tight cursor-pointer select-none">งานมหกรรม "ในความทรงจำ"</h1>
+                    </div>
+                </div>
+                <div class="flex space-x-1">
+                    <!-- Admin Button: Hidden by default for normal users -->
+                    <button id="adminBtn" onclick="openAdminModal()" title="ผู้ดูแลระบบ" class="w-9 h-9 bg-white/20 hover:bg-white/30 backdrop-blur-md rounded-full flex items-center justify-center text-white transition active:scale-95 hidden">
+                        <i class="fa-solid fa-user-gear text-sm"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="inline-flex items-center bg-white/20 backdrop-blur-md px-3 py-1 rounded-full text-xs font-medium text-white space-x-2 border border-white/30">
+                <i class="fa-regular fa-calendar"></i>
+                <span>10-13 ตุลาคม 2569</span>
+                <span class="opacity-60">|</span>
+                <i class="fa-regular fa-clock"></i>
+                <span>08.00 - 17.00 น.</span>
+            </div>
+        </header>
+
+        <!-- Main Content Area -->
+        <main class="px-5 -mt-8 flex-1 z-10 space-y-5">
+
+            <div class="bg-white rounded-2xl p-5 card-shadow border border-slate-100 relative overflow-hidden">
+                <div class="flex justify-between items-start mb-2">
+                    <div>
+                        <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">คะแนนสะสมของคุณ</span>
+                        <div class="flex items-baseline space-x-2 mt-1">
+                            <span id="userPoints" class="text-4xl font-extrabold text-slate-800 tracking-tight">0</span>
+                            <span class="text-lg font-bold text-amber-500">คะแนน</span>
+                        </div>
+                    </div>
+                    <div class="bg-amber-50 border border-amber-200 px-3 py-1.5 rounded-full flex items-center space-x-1.5 text-amber-700 font-semibold text-xs shadow-sm">
+                        <i class="fa-solid fa-location-dot text-amber-500"></i>
+                        <span id="scannedCountText">0 จุด</span>
+                    </div>
+                </div>
+
+                <!-- Progress Bar -->
+                <div class="mt-4">
+                    <div class="flex justify-between text-xs text-slate-500 mb-1 font-medium">
+                        <span>จำนวนจุดที่สแกนแล้ว</span>
+                        <span id="scannedProgressText" class="font-bold text-slate-700">สแกนแล้ว 0 จุด</span>
+                    </div>
+                    <div class="w-full bg-slate-100 rounded-full h-3 overflow-hidden p-0.5 border border-slate-200">
+                        <div id="progressBar" class="yellow-gradient h-full rounded-full transition-all duration-500 w-0"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="yellow-gradient rounded-2xl p-1 gold-glow transition transform active:scale-[0.98]">
+                <button onclick="startScanner()" class="w-full py-4 px-5 rounded-xl flex items-center justify-between text-slate-900 font-bold bg-amber-400 hover:bg-amber-300 transition shadow-inner">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-12 h-12 bg-slate-900 rounded-xl flex items-center justify-center text-amber-400 shadow">
+                            <i class="fa-solid fa-qrcode text-2xl"></i>
+                        </div>
+                        <div class="text-left">
+                            <p class="text-base font-extrabold leading-tight">สแกน QR Code เช็คอิน</p>
+                            <p class="text-xs font-normal text-slate-800 opacity-90">กดเพื่อเปิดกล้องสแกนรับ 5 คะแนนต่อจุด</p>
+                        </div>
+                    </div>
+                    <div class="w-8 h-8 rounded-full bg-slate-900/10 flex items-center justify-center text-slate-900">
+                        <i class="fa-solid fa-chevron-right text-sm"></i>
+                    </div>
+                </button>
+            </div>
+
+            <!-- Tab Navigation -->
+            <div class="flex bg-slate-200/80 p-1 rounded-xl text-sm font-semibold text-slate-600">
+                <button id="tabPointsBtn" onclick="switchTab('checkin')" class="flex-1 py-2.5 rounded-lg text-center transition bg-white text-museum-blue shadow-sm">
+                    <i class="fa-solid fa-location-dot mr-1"></i> จุดเช็คอิน
+                </button>
+                <button id="tabRedeemBtn" onclick="switchTab('redeem')" class="flex-1 py-2.5 rounded-lg text-center transition hover:text-slate-900">
+                    <i class="fa-solid fa-gift mr-1"></i> แลกของรางวัล
+                </button>
+            </div>
+
+            <div id="tabCheckin" class="space-y-3">
+                <div class="bg-amber-50 border border-amber-200/80 rounded-2xl p-4 flex items-center space-x-3 text-xs text-amber-800">
+                    <div class="text-amber-500 text-2xl"><i class="fa-solid fa-store"></i></div>
+                    <div>
+                        <p class="font-bold text-amber-900">ศูนย์แลกของที่ระลึก</p>
+                        <p>นำคะแนนที่สะสมได้มาแลกรับของรางวัลพิเศษ ณ บูธกิจกรรมหลัก</p>
+                    </div>
+                </div>
+
+                <div class="flex justify-between items-center px-1 pt-2">
+                    <h3 class="font-bold text-slate-700 text-sm flex items-center">
+                        <i class="fa-solid fa-clock-rotate-left mr-2 text-museum-blue"></i> ประวัติการสแกนเช็คอิน
+                    </h3>
+                    <span id="historyCountBadge" class="text-xs font-semibold text-slate-400">0 รายการ</span>
+                </div>
+
+                <div id="historyList" class="space-y-2">
+                    <!-- Dynamic history items rendered here -->
+                </div>
+            </div>
+
+            <div id="tabRedeem" class="space-y-3 hidden">
+                <div class="text-xs text-slate-500 px-1 font-medium">
+                    เลือกของรางวัลที่ต้องการแลกเมื่อสะสมคะแนนครบ
+                </div>
+
+                <div id="rewardsCatalog" class="space-y-3">
+                    <!-- Dynamic Reward Cards rendered here -->
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- Modal 1: Live QR Scanner Modal -->
+    <div id="scannerModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex flex-col justify-between hidden">
+        <div class="p-4 flex justify-between items-center text-white z-10">
+            <span class="font-bold text-lg flex items-center"><i class="fa-solid fa-camera mr-2"></i> สแกน QR Code</span>
+            <button onclick="stopScanner()" class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center text-white hover:bg-white/30">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+        </div>
+
+        <div class="flex-1 flex flex-col items-center justify-center px-4 relative">
+            <div id="qrReader" class="w-full max-w-sm rounded-2xl overflow-hidden shadow-2xl border-2 border-amber-400 bg-slate-900"></div>
+            <p class="text-white/80 text-xs mt-4 text-center">ส่องกล้องไปที่ QR Code ตามจุดกิจกรรมต่าง ๆ เพื่อสะสม 5 คะแนน</p>
+            
+            <!-- Quick Simulator Option inside Scanner -->
+            <div class="mt-6 w-full max-w-sm">
+                <p class="text-slate-400 text-xs text-center mb-2">หรือทดลองสแกนจุดจำลอง (สำหรับทดสอบระบบ)</p>
+                <div class="grid grid-cols-2 gap-2">
+                    <button onclick="simulateScan('STATION_01', 'จุดที่ 1: ซุ้มเฉลิมพระเกียรติ')" class="bg-white/10 hover:bg-white/20 text-white text-xs py-2 px-3 rounded-lg border border-white/10 text-left truncate">
+                        📍 จุดที่ 1: ซุ้มเฉลิมพระเกียรติ
+                    </button>
+                    <button onclick="simulateScan('STATION_02', 'จุดที่ 2: นิทรรศการในความทรงจำ')" class="bg-white/10 hover:bg-white/20 text-white text-xs py-2 px-3 rounded-lg border border-white/10 text-left truncate">
+                        📍 จุดที่ 2: นิทรรศการความทรงจำ
+                    </button>
+                    <button onclick="simulateScan('STATION_03', 'จุดที่ 3: โซนวิถีเกษตรไทย')" class="bg-white/10 hover:bg-white/20 text-white text-xs py-2 px-3 rounded-lg border border-white/10 text-left truncate">
+                        📍 จุดที่ 3: โซนวิถีเกษตรไทย
+                    </button>
+                    <button onclick="simulateScan('STATION_04', 'จุดที่ 4: เวทีกิจกรรมกลาง')" class="bg-white/10 hover:bg-white/20 text-white text-xs py-2 px-3 rounded-lg border border-white/10 text-left truncate">
+                        📍 จุดที่ 4: เวทีกิจกรรมกลาง
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="p-4 text-center">
+            <button onclick="stopScanner()" class="w-full py-3 bg-slate-800 text-white rounded-xl font-semibold">ปิดกล้อง</button>
+        </div>
+    </div>
+
+    <!-- Modal 2: Scan Success Screen -->
+    <div id="scanResultModal" class="fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-3xl p-6 w-full max-w-sm text-center shadow-2xl transform transition-all border border-amber-200">
+            <div class="w-20 h-20 bg-amber-100 rounded-full flex items-center justify-center text-amber-500 mx-auto mb-4 text-4xl animate-bounce border-4 border-amber-200">
+                <i class="fa-solid fa-star"></i>
+            </div>
+            <h3 class="text-2xl font-bold text-slate-800">สแกนสำเร็จ!</h3>
+            <p class="text-amber-600 font-extrabold text-xl mt-1">+5 คะแนน</p>
+            <p id="scannedStationName" class="text-sm font-semibold text-slate-600 bg-slate-100 py-2 px-4 rounded-xl mt-3">ชื่อฐานกิจกรรม</p>
+
+            <div class="mt-6 space-y-2">
+                <button onclick="continueScanning()" class="w-full py-3.5 yellow-gradient text-slate-900 font-bold rounded-xl shadow-lg hover:brightness-105 active:scale-95 flex items-center justify-center">
+                    <i class="fa-solid fa-camera mr-2"></i> เปิดกล้องสแกนต่อทันที
+                </button>
+                <button onclick="closeScanResultModal()" class="w-full py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-xl">
+                    กลับสู่หน้าหลัก
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal 3: Questionnaire Survey Modal -->
+    <div id="surveyModal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 hidden overflow-y-auto">
+        <div class="bg-white rounded-t-3xl sm:rounded-3xl p-6 w-full max-w-md shadow-2xl max-h-[90vh] flex flex-col">
+            <div class="flex justify-between items-center pb-3 border-b border-slate-100">
+                <h3 class="text-lg font-bold text-slate-800 flex items-center">
+                    <i class="fa-solid fa-clipboard-list text-museum-blue mr-2"></i> แบบสอบถามก่อนแลกรางวัล
+                </h3>
+                <button onclick="closeSurveyModal()" class="text-slate-400 hover:text-slate-600 text-xl"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+
+            <form id="surveyForm" onsubmit="handleSurveySubmit(event)" class="space-y-4 my-4 overflow-y-auto pr-1 text-sm text-slate-700 flex-1">
+                <input type="hidden" id="selectedRewardId">
+                <input type="hidden" id="selectedRewardName">
+                <input type="hidden" id="selectedRewardPoints">
+
+                <!-- Reward Info Preview -->
+                <div class="bg-amber-50 border border-amber-200 rounded-xl p-3 flex items-center space-x-3">
+                    <span id="surveyRewardIcon" class="text-2xl">🏆</span>
+                    <div>
+                        <p class="text-xs text-amber-700 font-medium">ของรางวัลที่เลือก</p>
+                        <p id="surveyRewardTitle" class="font-bold text-slate-800 text-base">เหรียญเงิน</p>
+                    </div>
+                </div>
+
+                <!-- Q1: Name -->
+                <div>
+                    <label class="block font-semibold mb-1 text-slate-700">1. ชื่อ-นามสกุล <span class="text-red-500">*</span></label>
+                    <input type="text" id="qName" required placeholder="กรอกชื่อ-นามสกุลของคุณ" class="w-full px-3 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-museum-blue outline-none">
+                </div>
+
+                <!-- Q2: Residence Zone -->
+                <div>
+                    <label class="block font-semibold mb-1 text-slate-700">2. ที่อยู่ปัจจุบัน (โซนที่อยู่อาศัย) <span class="text-red-500">*</span></label>
+                    <select id="qAddress" required class="w-full px-3 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-museum-blue outline-none bg-white">
+                        <option value="">-- เลือกโซนที่อยู่อาศัย --</option>
+                        <option value="ปทุมธานี / พื้นที่ใกล้เคียงพิพิธภัณฑ์">ปทุมธานี / พื้นที่ใกล้เคียงพิพิธภัณฑ์</option>
+                        <option value="กรุงเทพมหานครและปริมณฑล">กรุงเทพมหานครและปริมณฑล</option>
+                        <option value="ภาคกลาง">ภาคกลาง</option>
+                        <option value="ภาคเหนือ">ภาคเหนือ</option>
+                        <option value="ภาคตะวันออกเฉียงเหนือ">ภาคตะวันออกเฉียงเหนือ</option>
+                        <option value="ภาคตะวันออก">ภาคตะวันออก</option>
+                        <option value="ภาคใต้">ภาคใต้</option>
+                        <option value="ภาคตะวันตก">ภาคตะวันตก</option>
+                    </select>
+                </div>
+
+                <!-- Q3: Transport -->
+                <div>
+                    <label class="block font-semibold mb-1 text-slate-700">3. การเดินทางมาร่วมงาน <span class="text-red-500">*</span></label>
+                    <div class="space-y-1.5">
+                        <label class="flex items-center p-2 border border-slate-200 rounded-xl cursor-pointer hover:bg-slate-50">
+                            <input type="radio" name="qTransport" value="รถส่วนตัว" required class="accent-museum-blue mr-2">
+                            <span>รถส่วนตัว</span>
+                        </label>
+                        <label class="flex items-center p-2 border border-slate-200 rounded-xl cursor-pointer hover:bg-slate-50">
+                            <input type="radio" name="qTransport" value="รถสาธารณะ" class="accent-museum-blue mr-2">
+                            <span>รถสาธารณะ</span>
+                        </label>
+                        <label class="flex items-center p-2 border border-slate-200 rounded-xl cursor-pointer hover:bg-slate-50">
+                            <input type="radio" name="qTransport" value="รถสาธารณะ – ต่อรถที่ฟิวเจอร์" class="accent-museum-blue mr-2">
+                            <span>รถสาธารณะ – ต่อรถที่ฟิวเจอร์</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Q4: Visit Frequency -->
+                <div>
+                    <label class="block font-semibold mb-1 text-slate-700">4. เคยมาที่พิพิธภัณฑ์กี่ครั้ง <span class="text-red-500">*</span></label>
+                    <div class="space-y-1.5">
+                        <label class="flex items-center p-2 border border-slate-200 rounded-xl cursor-pointer hover:bg-slate-50">
+                            <input type="radio" name="qVisits" value="ครั้งแรก" required class="accent-museum-blue mr-2">
+                            <span>ครั้งแรก</span>
+                        </label>
+                        <label class="flex items-center p-2 border border-slate-200 rounded-xl cursor-pointer hover:bg-slate-50">
+                            <input type="radio" name="qVisits" value="2-5 ครั้ง" class="accent-museum-blue mr-2">
+                            <span>2-5 ครั้ง</span>
+                        </label>
+                        <label class="flex items-center p-2 border border-slate-200 rounded-xl cursor-pointer hover:bg-slate-50">
+                            <input type="radio" name="qVisits" value="มากกว่า 5 ครั้ง" class="accent-museum-blue mr-2">
+                            <span>มากกว่า 5 ครั้ง</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Q5: Satisfaction -->
+                <div>
+                    <label class="block font-semibold mb-1 text-slate-700">5. ความพึงพอใจ <span class="text-red-500">*</span></label>
+                    <div class="grid grid-cols-5 gap-1 text-center text-xs">
+                        <label class="p-2 border border-slate-200 rounded-xl cursor-pointer hover:bg-slate-50 flex flex-col items-center">
+                            <input type="radio" name="qSatisfaction" value="ดีมาก" required class="accent-museum-blue mb-1">
+                            <span>ดีมาก</span>
+                        </label>
+                        <label class="p-2 border border-slate-200 rounded-xl cursor-pointer hover:bg-slate-50 flex flex-col items-center">
+                            <input type="radio" name="qSatisfaction" value="ดี" class="accent-museum-blue mb-1">
+                            <span>ดี</span>
+                        </label>
+                        <label class="p-2 border border-slate-200 rounded-xl cursor-pointer hover:bg-slate-50 flex flex-col items-center">
+                            <input type="radio" name="qSatisfaction" value="พอใช้" class="accent-museum-blue mb-1">
+                            <span>พอใช้</span>
+                        </label>
+                        <label class="p-2 border border-slate-200 rounded-xl cursor-pointer hover:bg-slate-50 flex flex-col items-center">
+                            <input type="radio" name="qSatisfaction" value="น้อย" class="accent-museum-blue mb-1">
+                            <span>น้อย</span>
+                        </label>
+                        <label class="p-2 border border-slate-200 rounded-xl cursor-pointer hover:bg-slate-50 flex flex-col items-center">
+                            <input type="radio" name="qSatisfaction" value="น้อยมาก" class="accent-museum-blue mb-1">
+                            <span>น้อยมาก</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Q6: Feedback -->
+                <div>
+                    <label class="block font-semibold mb-1 text-slate-700">6. ข้อเสนอแนะเพิ่มเติม</label>
+                    <textarea id="qFeedback" rows="2" placeholder="ข้อเสนอแนะสำหรับการจัดงาน..." class="w-full px-3 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-museum-blue outline-none"></textarea>
+                </div>
+
+                <div class="pt-2">
+                    <button type="submit" class="w-full py-3 bg-museum-blue text-white rounded-xl font-bold shadow-lg hover:bg-museum-darkblue transition">
+                        ดำเนินการต่อ <i class="fa-solid fa-arrow-right ml-1"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal 4: Staff Only Redemption Modal -->
+    <div id="staffModal" class="fixed inset-0 bg-red-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-3xl p-6 w-full max-w-sm text-center shadow-2xl border-4 border-red-500 relative">
+            <div class="w-16 h-16 bg-red-100 text-red-600 rounded-full flex items-center justify-center text-3xl mx-auto mb-3 animate-pulse">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+            </div>
+            
+            <h3 class="text-xl font-extrabold text-slate-900">ขั้นตอนการรับของรางวัล</h3>
+            <p id="staffModalRewardText" class="text-amber-600 font-bold text-lg mt-1">รางวัล: เหรียญเงิน</p>
+            
+            <!-- Warning Box -->
+            <div class="bg-red-50 border border-red-200 p-4 rounded-2xl my-4 text-left space-y-1">
+                <p class="text-red-700 font-bold text-xs flex items-center">
+                    <i class="fa-solid fa-hand-paper mr-1.5 text-sm"></i> หมายเหตุสำคัญมาก!
+                </p>
+                <p class="text-xs text-red-600 leading-relaxed font-medium">
+                    โปรดยื่นหน้าจอนี้ให้เจ้าหน้าที่ประจำบูธกดปุ่มยืนยัน <span class="font-bold underline">หากกดยืนยันด้วยตนเอง จะถือว่าสละสิทธิ์รางวัล</span>
+                </p>
+            </div>
+
+            <!-- Staff Confirm Button -->
+            <button onclick="confirmRedeemByStaff()" class="w-full py-4 bg-red-600 hover:bg-red-700 text-white font-extrabold text-base rounded-2xl shadow-xl transition active:scale-95 border-2 border-red-400 flex items-center justify-center space-x-2">
+                <i class="fa-solid fa-user-shield"></i>
+                <span>ห้ามกด เฉพาะเจ้าหน้าที่เท่านั้น</span>
+            </button>
+
+            <button onclick="closeStaffModal()" class="w-full py-2.5 mt-3 text-slate-400 hover:text-slate-600 text-xs font-semibold">
+                ยกเลิก / กลับสู่หน้าหลัก
+            </button>
+        </div>
+    </div>
+
+    <!-- Modal 5: Admin QR Code Generator & Settings Modal -->
+    <div id="adminModal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-3xl p-6 w-full max-w-md shadow-2xl max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center pb-3 border-b border-slate-100">
+                <h3 class="text-lg font-bold text-slate-800 flex items-center">
+                    <i class="fa-solid fa-sliders text-museum-blue mr-2"></i> ผู้ดูแลระบบ (Admin)
+                </h3>
+                <button onclick="closeAdminModal()" class="text-slate-400 hover:text-slate-600 text-xl"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+
+            <div class="space-y-5 my-4 text-xs text-slate-700">
+                <!-- Google Sheets Web App URL -->
+                <div class="space-y-1.5">
+                    <label class="font-bold text-slate-800 block">Google Apps Script Web App URL:</label>
+                    <input type="text" id="webAppUrlInput" placeholder="https://script.google.com/macros/s/.../exec" class="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs focus:ring-2 focus:ring-museum-blue outline-none">
+                    <button onclick="saveWebAppUrl()" class="w-full py-2 bg-slate-800 text-white font-bold rounded-lg hover:bg-slate-900">บันทึก Web App URL</button>
+                </div>
+
+                <hr class="border-slate-200">
+
+                <!-- Dynamic QR Code Generator -->
+                <div class="space-y-3">
+                    <h4 class="font-bold text-slate-900 text-sm flex items-center">
+                        <i class="fa-solid fa-plus-circle text-amber-500 mr-1.5"></i> สร้าง QR Code จุดเช็คอิน (ไม่จำกัดจำนวน)
+                    </h4>
+                    
+                    <div class="space-y-2">
+                        <div>
+                            <label class="block mb-1 font-semibold">รหัสจุด (Station ID):</label>
+                            <input type="text" id="newStationId" placeholder="เช่น STATION_05" class="w-full px-3 py-2 border border-slate-300 rounded-xl">
+                        </div>
+                        <div>
+                            <label class="block mb-1 font-semibold">ชื่อจุดกิจกรรม (Station Name):</label>
+                            <input type="text" id="newStationName" placeholder="เช่น จุดที่ 5: บูธจัดแสดงพืชพันธุ์" class="w-full px-3 py-2 border border-slate-300 rounded-xl">
+                        </div>
+                        <button onclick="generateCustomQR()" class="w-full py-2.5 yellow-gradient text-slate-900 font-bold rounded-xl shadow">
+                            สร้างภาพ QR Code
+                        </button>
+                    </div>
+
+                    <!-- Display Generated QR Code -->
+                    <div id="qrOutputContainer" class="hidden text-center p-4 bg-slate-50 border border-slate-200 rounded-2xl space-y-2">
+                        <p class="font-bold text-slate-800" id="previewStationTitle">ชื่อจุด</p>
+                        <div class="flex justify-center my-2">
+                            <img id="qrImagePreview" src="" alt="QR Code" class="w-48 h-48 border-2 border-white shadow-md rounded-xl">
+                        </div>
+                        <p class="text-[10px] text-slate-400" id="previewPayloadText">Payload</p>
+                        <a id="downloadQrBtn" download="QRCode.png" href="" class="inline-block py-2 px-4 bg-museum-blue text-white font-bold rounded-lg text-xs hover:bg-museum-darkblue">
+                            <i class="fa-solid fa-download mr-1"></i> ดาวน์โหลดรูปภาพ QR Code
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <button onclick="closeAdminModal()" class="w-full py-2.5 bg-slate-100 text-slate-600 font-bold rounded-xl">ปิด</button>
+        </div>
+    </div>
+
+    <script>
+        // --- DATA STATE & CONFIG ---
+        const DEFAULT_REWARDS = [
+            { id: 'silver', name: 'เหรียญเงิน', points: 50, icon: '🥈', badge: '50 คะแนน' },
+            { id: 'gold', name: 'เหรียญทอง', points: 100, icon: '🥇', badge: '100 คะแนน' },
+            { id: 'diamond', name: 'เพชร', points: 200, icon: '💎', badge: '200 คะแนน' },
+            { id: 'supernova', name: 'ซุปเปอร์โนว่า', points: 300, icon: '🌟', badge: '300 คะแนน' }
+        ];
+
+        // Global State
+        let appState = {
+            points: 0,
+            scannedStations: {}, // { stationId: { name, timestamp } }
+            redemptions: [], // List of redeemed rewards
+            webAppUrl: localStorage.getItem('museum_webapp_url') || ''
+        };
+
+        let html5QrCode = null;
+        let tempSurveyData = null;
+
+        // Initialize App
+        window.addEventListener('DOMContentLoaded', () => {
+            loadAppState();
+            renderDashboard();
+            renderHistory();
+            renderRewards();
+            checkUrlScanParams();
+            checkAdminAccess();
+
+            // Setup Admin URL Input
+            document.getElementById('webAppUrlInput').value = appState.webAppUrl;
+        });
+
+        let secretTapCount = 0;
+        let secretTapTimer = null;
+
+        // Secret 5-tap gesture on title to unlock admin mode
+        function handleSecretAdminTap() {
+            secretTapCount++;
+            clearTimeout(secretTapTimer);
+            if (secretTapCount >= 5) {
+                secretTapCount = 0;
+                openAdminModal();
+            } else {
+                secretTapTimer = setTimeout(() => { secretTapCount = 0; }, 2000);
+            }
+        }
+
+        // Show Admin button if URL contains ?admin=true or ?admin=1234
+        function checkAdminAccess() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('admin') === 'true' || urlParams.get('admin') === '1234') {
+                const adminBtn = document.getElementById('adminBtn');
+                if (adminBtn) adminBtn.classList.remove('hidden');
+            }
+        }
+
+        // Save state to LocalStorage
+        function saveAppState() {
+            localStorage.setItem('museum_point_app_data', JSON.stringify(appState));
+        }
+
+        // --- DASHBOARD RENDERING ---
+        function renderDashboard() {
+            document.getElementById('userPoints').innerText = appState.points;
+            
+            const count = Object.keys(appState.scannedStations).length;
+            document.getElementById('scannedCountText').innerText = `${count} จุด`;
+            document.getElementById('historyCountBadge').innerText = `${count} รายการ`;
+
+            // Display scanned count instead of percentage
+            const scannedProgressEl = document.getElementById('scannedProgressText');
+            if (scannedProgressEl) {
+                scannedProgressEl.innerText = `สแกนแล้ว ${count} จุด`;
+            }
+
+            // Progress bar length based on target 300 points
+            const percentage = Math.min(Math.round((appState.points / 300) * 100), 100);
+            document.getElementById('progressBar').style.width = `${percentage}%`;
+        }
+
+        // --- TAB SWITCHING ---
+        function switchTab(tab) {
+            const tabPointsBtn = document.getElementById('tabPointsBtn');
+            const tabRedeemBtn = document.getElementById('tabRedeemBtn');
+            const tabCheckin = document.getElementById('tabCheckin');
+            const tabRedeem = document.getElementById('tabRedeem');
+
+            if (tab === 'checkin') {
+                tabCheckin.classList.remove('hidden');
+                tabRedeem.classList.add('hidden');
+                tabPointsBtn.className = "flex-1 py-2.5 rounded-lg text-center transition bg-white text-museum-blue shadow-sm font-bold";
+                tabRedeemBtn.className = "flex-1 py-2.5 rounded-lg text-center transition hover:text-slate-900 font-normal";
+            } else {
+                tabCheckin.classList.add('hidden');
+                tabRedeem.classList.remove('hidden');
+                tabRedeemBtn.className = "flex-1 py-2.5 rounded-lg text-center transition bg-white text-museum-blue shadow-sm font-bold";
+                tabPointsBtn.className = "flex-1 py-2.5 rounded-lg text-center transition hover:text-slate-900 font-normal";
+            }
+        }
+
+        // --- HISTORY RENDER ---
+        function renderHistory() {
+            const historyList = document.getElementById('historyList');
+            historyList.innerHTML = '';
+
+            const stations = Object.values(appState.scannedStations);
+            if (stations.length === 0) {
+                historyList.innerHTML = `
+                    <div class="text-center py-8 bg-white rounded-2xl border border-slate-100 p-4">
+                        <i class="fa-solid fa-map-location-dot text-slate-300 text-4xl mb-2"></i>
+                        <p class="text-slate-500 font-medium text-xs">ยังไม่มีประวัติการสะสมคะแนน</p>
+                        <p class="text-slate-400 text-[11px] mt-1">กดปุ่ม "สแกน QR Code เช็คอิน" เพื่อเริ่มสะสมคะแนน</p>
+                    </div>
+                `;
+                return;
+            }
+
+            // Sort by newest first
+            stations.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+
+            stations.forEach(item => {
+                const dateStr = new Date(item.timestamp).toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' });
+                const el = document.createElement('div');
+                el.className = "bg-white p-3.5 rounded-2xl card-shadow border border-slate-100 flex items-center justify-between";
+                el.innerHTML = `
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center font-bold text-lg">
+                            <i class="fa-solid fa-location-dot"></i>
+                        </div>
+                        <div>
+                            <p class="font-bold text-slate-800 text-xs">${escapeHtml(item.name)}</p>
+                            <p class="text-[10px] text-slate-400"><i class="fa-regular fa-clock mr-1"></i>เช็คอินเมื่อ ${dateStr} น.</p>
+                        </div>
+                    </div>
+                    <span class="bg-amber-400/20 text-amber-800 font-extrabold text-xs px-2.5 py-1 rounded-full">+5 คะแนน</span>
+                `;
+                historyList.appendChild(el);
+            });
+        }
+
+        // --- REWARDS CATALOG RENDER ---
+        function renderRewards() {
+            const container = document.getElementById('rewardsCatalog');
+            container.innerHTML = '';
+
+            DEFAULT_REWARDS.forEach(reward => {
+                const canRedeem = appState.points >= reward.points;
+                const card = document.createElement('div');
+                card.className = `bg-white p-4 rounded-2xl border ${canRedeem ? 'border-amber-200 card-shadow' : 'border-slate-200 opacity-80'} flex items-center justify-between`;
+                
+                card.innerHTML = `
+                    <div class="flex items-center space-x-3">
+                        <div class="w-12 h-12 rounded-2xl ${canRedeem ? 'bg-amber-100' : 'bg-slate-100'} flex items-center justify-center text-2xl shadow-inner">
+                            ${reward.icon}
+                        </div>
+                        <div>
+                            <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md ${canRedeem ? 'bg-amber-100 text-amber-800' : 'bg-slate-100 text-slate-500'}">
+                                ${reward.badge}
+                            </span>
+                            <h4 class="font-bold text-slate-800 text-sm mt-0.5">${reward.name}</h4>
+                        </div>
+                    </div>
+                    <div>
+                        ${canRedeem ? `
+                            <button onclick="openSurveyModal('${reward.id}', '${reward.name}', ${reward.points}, '${reward.icon}')" class="py-2 px-4 yellow-gradient text-slate-900 font-bold text-xs rounded-xl shadow hover:brightness-105 active:scale-95 transition">
+                                แลกรางวัล
+                            </button>
+                        ` : `
+                            <button disabled class="py-2 px-3 bg-slate-100 text-slate-400 font-semibold text-xs rounded-xl cursor-not-allowed">
+                                คะแนนไม่พอ
+                            </button>
+                        `}
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // --- QR SCANNER LOGIC ---
+        function startScanner() {
+            document.getElementById('scannerModal').classList.remove('hidden');
+            
+            if (!html5QrCode) {
+                html5QrCode = new Html5Qrcode("qrReader");
+            }
+
+            const config = { fps: 10, qrbox: { width: 250, height: 250 } };
+            html5QrCode.start(
+                { facingMode: "environment" },
+                config,
+                onScanSuccess,
+                onScanFailure
+            ).catch(err => {
+                console.warn("Unable to start camera scanner", err);
+            });
+        }
+
+        function stopScanner() {
+            if (html5QrCode && html5QrCode.isScanning) {
+                html5QrCode.stop().then(() => {
+                    document.getElementById('scannerModal').classList.add('hidden');
+                }).catch(err => {
+                    document.getElementById('scannerModal').classList.add('hidden');
+                });
+            } else {
+                document.getElementById('scannerModal').classList.add('hidden');
+            }
+        }
+
+        function onScanSuccess(decodedText, decodedResult) {
+            // Process code payload
+            processScanData(decodedText);
+        }
+
+        function onScanFailure(error) {
+            // Ignore frame errors
+        }
+
+        // Simulate scanning directly
+        function simulateScan(stationId, stationName) {
+            const payload = `MUSEUM:${stationId}:${stationName}`;
+            processScanData(payload);
+        }
+
+        // Check URL Query params e.g. ?point=STATION_01
+        function checkUrlScanParams() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const pointParam = urlParams.get('point') || urlParams.get('station');
+            if (pointParam) {
+                processScanData(`MUSEUM:${pointParam}:${pointParam}`);
+                // Clean URL
+                window.history.replaceState({}, document.title, window.location.pathname);
+            }
+        }
+
+        // Main Point Processing Function
+        function processScanData(payload) {
+            let stationId = payload;
+            let stationName = payload;
+
+            // Check formatted payload MUSEUM:ID:NAME
+            if (payload.startsWith("MUSEUM:")) {
+                const parts = payload.split(":");
+                stationId = parts[1] || payload;
+                stationName = parts[2] || parts[1] || payload;
+            }
+
+            // Check if already scanned
+            if (appState.scannedStations[stationId]) {
+                stopScanner();
+                showCustomAlert("ท่านเคยสแกนรับคะแนนที่จุดนี้ไปแล้ว!", "warning");
+                return;
+            }
+
+            // Award 5 points
+            appState.points += 5;
+            appState.scannedStations[stationId] = {
+                id: stationId,
+                name: stationName,
+                timestamp: new Date().toISOString()
+            };
+
+            saveAppState();
+            renderDashboard();
+            renderHistory();
+            renderRewards();
+
+            // Stop Scanner & Show Success Screen
+            stopScanner();
+            
+            document.getElementById('scannedStationName').innerText = stationName;
+            document.getElementById('scanResultModal').classList.remove('hidden');
+
+            // Trigger Confetti effect
+            try {
+                confetti({ particleCount: 60, spread: 60, origin: { y: 0.6 } });
+            } catch(e){}
+        }
+
+        function continueScanning() {
+            closeScanResultModal();
+            startScanner();
+        }
+
+        function closeScanResultModal() {
+            document.getElementById('scanResultModal').classList.add('hidden');
+        }
+
+        // --- SURVEY & REDEMPTION FLOW ---
+        function openSurveyModal(rewardId, rewardName, rewardPoints, rewardIcon) {
+            document.getElementById('selectedRewardId').value = rewardId;
+            document.getElementById('selectedRewardName').value = rewardName;
+            document.getElementById('selectedRewardPoints').value = rewardPoints;
+
+            document.getElementById('surveyRewardTitle').innerText = `${rewardName} (${rewardPoints} คะแนน)`;
+            document.getElementById('surveyRewardIcon').innerText = rewardIcon;
+
+            document.getElementById('surveyModal').classList.remove('hidden');
+        }
+
+        function closeSurveyModal() {
+            document.getElementById('surveyModal').classList.add('hidden');
+        }
+
+        function handleSurveySubmit(e) {
+            e.preventDefault();
+
+            const rewardId = document.getElementById('selectedRewardId').value;
+            const rewardName = document.getElementById('selectedRewardName').value;
+            const rewardPoints = parseInt(document.getElementById('selectedRewardPoints').value);
+
+            // Collect Form Data
+            tempSurveyData = {
+                fullName: document.getElementById('qName').value.trim(),
+                addressZone: document.getElementById('qAddress').value,
+                transportMethod: document.querySelector('input[name="qTransport"]:checked')?.value || '',
+                visitFrequency: document.querySelector('input[name="qVisits"]:checked')?.value || '',
+                satisfaction: document.querySelector('input[name="qSatisfaction"]:checked')?.value || '',
+                feedback: document.getElementById('qFeedback').value.trim(),
+                rewardName: rewardName,
+                rewardPoints: rewardPoints,
+                rewardId: rewardId,
+                timestamp: new Date().toLocaleString('th-TH')
+            };
+
+            closeSurveyModal();
+
+            // Show Staff Confirmation Modal
+            document.getElementById('staffModalRewardText').innerText = `รางวัล: ${rewardName} (${rewardPoints} คะแนน)`;
+            document.getElementById('staffModal').classList.remove('hidden');
+        }
+
+        function closeStaffModal() {
+            document.getElementById('staffModal').classList.add('hidden');
+        }
+
+        // Confirmed by Staff Only
+        function confirmRedeemByStaff() {
+            if (!tempSurveyData) return;
+
+            // Check if user still has enough points
+            if (appState.points < tempSurveyData.rewardPoints) {
+                closeStaffModal();
+                showCustomAlert("คะแนนสะสมของคุณไม่เพียงพอ", "error");
+                return;
+            }
+
+            // Deduct Points
+            appState.points -= tempSurveyData.rewardPoints;
+            appState.redemptions.push(tempSurveyData);
+
+            // Prepare scanned stations list for survey summary
+            const scannedStationNames = Object.values(appState.scannedStations)
+                .map(s => s.name)
+                .join(', ');
+
+            tempSurveyData.scannedStations = scannedStationNames;
+            tempSurveyData.totalPointsLeft = appState.points;
+
+            // Save state
+            saveAppState();
+            renderDashboard();
+            renderHistory();
+            renderRewards();
+
+            // Send to Google Sheet if Web App URL is provided
+            sendDataToGoogleSheet(tempSurveyData);
+
+            closeStaffModal();
+
+            // Big Celebration Confetti
+            try {
+                confetti({ particleCount: 150, spread: 90, origin: { y: 0.5 } });
+            } catch(e){}
+
+            showCustomAlert(`แลกรับของรางวัล "${tempSurveyData.rewardName}" เรียบร้อยแล้ว!`, "success");
+            tempSurveyData = null;
+        }
+
+        // --- GOOGLE SHEETS INTEGRATION ---
+        function sendDataToGoogleSheet(data) {
+            const url = appState.webAppUrl || localStorage.getItem('museum_webapp_url');
+            if (!url) {
+                console.log("No Google Web App URL configured. Data saved locally.");
+                return;
+            }
+
+            fetch(url, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            })
+            .then(() => console.log("Data successfully posted to Google Sheet"))
+            .catch(err => console.error("Error posting to Google Sheet", err));
+        }
+
+        function saveWebAppUrl() {
+            const url = document.getElementById('webAppUrlInput').value.trim();
+            appState.webAppUrl = url;
+            localStorage.setItem('museum_webapp_url', url);
+            showCustomAlert("บันทึก Google Web App URL เรียบร้อยแล้ว", "success");
+        }
+
+        // --- ADMIN QR CODE GENERATOR ---
+        function openAdminModal() {
+            const pin = prompt("กรุณากรอกรหัสผ่านผู้ดูแลระบบ (Admin PIN):");
+            if (pin === "1234") {
+                document.getElementById('adminModal').classList.remove('hidden');
+            } else if (pin !== null) {
+                showCustomAlert("รหัสผ่านไม่ถูกต้อง! เฉพาะเจ้าหน้าที่เท่านั้น", "error");
+            }
+        }
+
+        function closeAdminModal() {
+            document.getElementById('adminModal').classList.add('hidden');
+        }
+
+        function generateCustomQR() {
+            const id = document.getElementById('newStationId').value.trim();
+            const name = document.getElementById('newStationName').value.trim();
+
+            if (!id || !name) {
+                showCustomAlert("กรุณากรอกข้อมูลรหัสจุดและชื่อจุดกิจกรรมให้ครบถ้วน", "warning");
+                return;
+            }
+
+            const payload = `MUSEUM:${id}:${name}`;
+            const qrImageUrl = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(payload)}`;
+
+            document.getElementById('previewStationTitle').innerText = name;
+            document.getElementById('previewPayloadText').innerText = `Payload: ${payload}`;
+            document.getElementById('qrImagePreview').src = qrImageUrl;
+
+            const downloadBtn = document.getElementById('downloadQrBtn');
+            downloadBtn.href = qrImageUrl;
+
+            document.getElementById('qrOutputContainer').classList.remove('hidden');
+        }
+
+        // RESET SYSTEM
+        function resetDataPrompt() {
+            if (confirm("คุณต้องการรีเซ็ตคะแนนและประวัติทั้งหมดใช่หรือไม่? (สำหรับเริ่มสะสมใหม่)")) {
+                appState.points = 0;
+                appState.scannedStations = {};
+                appState.redemptions = [];
+                saveAppState();
+                renderDashboard();
+                renderHistory();
+                renderRewards();
+                showCustomAlert("รีเซ็ตข้อมูลเรียบร้อยแล้ว", "info");
+            }
+        }
+
+        // Helper alert function
+        function showCustomAlert(message, type = "info") {
+            const bg = type === 'success' ? 'bg-emerald-600' : type === 'warning' ? 'bg-amber-600' : type === 'error' ? 'bg-red-600' : 'bg-slate-800';
+            const toast = document.createElement('div');
+            toast.className = `fixed top-5 left-1/2 -translate-x-1/2 z-50 ${bg} text-white px-5 py-3 rounded-2xl shadow-2xl text-xs font-bold transition-all duration-300 flex items-center space-x-2`;
+            toast.innerHTML = `<i class="fa-solid fa-circle-info"></i> <span>${escapeHtml(message)}</span>`;
+            document.body.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        function escapeHtml(str) {
+            return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+        }
+    </script>
+</body>
+</html>
