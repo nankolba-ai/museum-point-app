@@ -492,7 +492,7 @@
             points: 0,
             scannedStations: {}, // { stationId: { name, timestamp } }
             redemptions: [], // List of redeemed rewards
-            webAppUrl: localStorage.getItem('museum_webapp_url') || ''
+            webAppUrl: localStorage.getItem('museum_webapp_url') || ' https://script.google.com/macros/s/AKfycbyZrKC-fCdcv7AnVe9rfQkvP0Zyy3wBwOsAFIrEDPAjSBwLiyvP6IE57M-EW3WNRcPZ0A/exec'
         };
 
         let html5QrCode = null;
@@ -860,7 +860,7 @@
 
         // --- GOOGLE SHEETS INTEGRATION ---
         function sendDataToGoogleSheet(data) {
-            const url = appState.webAppUrl || localStorage.getItem('museum_webapp_url');
+            const url = appState.webAppUrl || localStorage.getItem('museum_webapp_url') || ' https://script.google.com/macros/s/AKfycbyZrKC-fCdcv7AnVe9rfQkvP0Zyy3wBwOsAFIrEDPAjSBwLiyvP6IE57M-EW3WNRcPZ0A/exec';
             if (!url) {
                 console.log("No Google Web App URL configured. Data saved locally.");
                 return;
@@ -953,3 +953,4 @@
     </script>
 </body>
 </html>
+
