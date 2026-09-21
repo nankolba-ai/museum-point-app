@@ -86,9 +86,9 @@
             <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-tr from-sky-600 to-sky-400 rounded-full border-4 border-white shadow-lg text-white mb-2 transform hover:rotate-6 transition duration-300">
                 <i data-lucide="landmark" class="w-9 h-9 drop-shadow-sm"></i>
             </div>
-            <p class="text-xs text-sky-800 font-medium tracking-wide uppercase">พิพิธภัณฑ์การเรียนรู้</p>
+            <p class="text-xs text-sky-800 font-medium tracking-wide uppercase">พิพิธภัณฑ์การเกษตรฯ ปทุมธานี </p>
             <h1 id="app-header-title" onclick="handleTitleClick()" class="text-xl font-extrabold text-sky-950 drop-shadow-sm cursor-pointer active:opacity-80">
-                งานนวัตกรรม "ในความทรงจำ"
+                งานมหกรรม "ในความทรงจำ"
             </h1>
 
             <!-- Date Banner -->
@@ -694,19 +694,18 @@
         }
 
         // ===================== CAMERA SCANNER LOGIC (BACK CAMERA ONLY) =====================
-        // Uses the lower-level Html5Qrcode API (instead of Html5QrcodeScanner) so we can force
-        // facingMode: "environment" and never show a front-camera / camera-picker option.
-
         function startScanner() {
             document.getElementById('modal-scanner').classList.remove('hidden');
             playerScanner = new Html5Qrcode("reader");
+            
+            // บังคับใช้กล้องหลังโดยตรงด้วย facingMode: { exact: "environment" }
             playerScanner.start(
                 { facingMode: { exact: "environment" } },
                 { fps: 10, qrbox: { width: 220, height: 220 } },
                 onScanSuccess,
                 onScanFailure
             ).catch(() => {
-                // Fallback for devices that don't support the "exact" constraint
+                // Fallback กรณีอุปกรณ์บางรุ่นไม่รองรับข้อกำหนดแบบ "exact"
                 playerScanner.start(
                     { facingMode: "environment" },
                     { fps: 10, qrbox: { width: 220, height: 220 } },
@@ -889,11 +888,11 @@
 
         // ===================== ADMIN: MANAGE CHECK-IN POINTS (ADD / EDIT / DELETE) =====================
 
-        // Render the admin-facing list of check-in points with Edit/Delete controls
+        // แสดงรายการจุดเช็คอินในหน้า Admin
         function renderAdminLocationsList() {
             const container = document.getElementById('admin-locations-list');
             const countEl = document.getElementById('admin-location-count');
-            if (!container || !countEl) return; // Panel not yet in DOM on first load, safe guard
+            if (!container || !countEl) return;
 
             countEl.innerText = checkinLocations.length;
 
@@ -925,7 +924,7 @@
             lucide.createIcons();
         }
 
-        // Add or Update depending on whether we are in "edit mode"
+        // ฟังก์ชันรับส่งข้อมูลแบบฟอร์ม (เพิ่ม หรือ แก้ไข)
         function submitCheckinPointForm() {
             if (editingLocationId) {
                 updateCheckinPoint();
@@ -934,7 +933,7 @@
             }
         }
 
-        // Create a brand-new check-in point (also generates a printable QR)
+        // เพิ่มจุดเช็คอินใหม่
         function generateAdminQR() {
             let idInput = document.getElementById('new-location-id').value.trim();
             const nameInput = document.getElementById('new-location-name').value.trim();
@@ -950,7 +949,6 @@
                 idInput = 'POINT_' + String(checkinLocations.length + 1).padStart(2, '0');
             }
 
-            // Check duplicate
             if (checkinLocations.some(l => l.id === idInput)) {
                 alert('รหัสจุดเช็คอินนี้มีอยู่ในระบบแล้ว');
                 return;
@@ -971,18 +969,18 @@
             document.getElementById('generated-qr-result').classList.remove('hidden');
             clearLocationForm();
 
-            updateUI();
+            updateUI(); // อัปเดต UI หน้าบ้านทันที
             alert(`เพิ่มจุดเช็คอิน "${nameInput}" (${pointsVal} คะแนน) เรียบร้อยแล้ว`);
         }
 
-        // Populate the form with an existing point's data so admin can edit it
+        // เริ่มโหมดแก้ไขจุดเช็คอิน
         function startEditLocation(id) {
             const loc = checkinLocations.find(l => l.id === id);
             if (!loc) return;
 
             editingLocationId = id;
             document.getElementById('new-location-id').value = loc.id;
-            document.getElementById('new-location-id').disabled = true; // ID stays fixed while editing
+            document.getElementById('new-location-id').disabled = true; // ไม่ให้แก้ ID ในขณะแก้ไข
             document.getElementById('new-location-name').value = loc.name;
             document.getElementById('new-location-points').value = loc.points ?? 5;
 
@@ -993,7 +991,7 @@
             renderAdminLocationsList();
         }
 
-        // Save changes made to an existing check-in point
+        // บันทึกการแก้ไข
         function updateCheckinPoint() {
             const loc = checkinLocations.find(l => l.id === editingLocationId);
             if (!loc) {
@@ -1014,11 +1012,11 @@
             loc.points = pointsVal;
 
             cancelEditLocation();
-            updateUI();
+            updateUI(); // อัปเดต UI หน้าบ้านทันที
             alert('บันทึกการแก้ไขจุดเช็คอินเรียบร้อยแล้ว');
         }
 
-        // Cancel edit mode and reset the form back to "add new" mode
+        // ยกเลิกโหมดแก้ไข
         function cancelEditLocation() {
             editingLocationId = null;
             document.getElementById('new-location-id').disabled = false;
@@ -1034,7 +1032,7 @@
             document.getElementById('new-location-points').value = '5';
         }
 
-        // Delete a check-in point — updates player-facing data immediately
+        // ลบจุดเช็คอิน
         function deleteCheckinPoint(id) {
             const loc = checkinLocations.find(l => l.id === id);
             if (!loc) return;
@@ -1043,19 +1041,20 @@
 
             checkinLocations = checkinLocations.filter(l => l.id !== id);
 
-            // If admin happened to be editing this exact point, reset the form
             if (editingLocationId === id) {
                 cancelEditLocation();
             }
 
-            updateUI(); // Immediately refreshes player-facing checkin list, progress bar & totals
+            updateUI(); // อัปเดต UI หน้าบ้านทันที
             alert(`ลบจุดเช็คอิน "${loc.name}" เรียบร้อยแล้ว`);
         }
 
         // ===================== ADMIN SCANNER (BACK CAMERA ONLY) =====================
         function startAdminScanner() {
-            if (adminScanner) return; // already running
+            if (adminScanner) return;
             adminScanner = new Html5Qrcode("admin-scanner-box");
+            
+            // บังคับใช้กล้องหลังสำหรับแอดมินเช่นเดียวกัน
             adminScanner.start(
                 { facingMode: { exact: "environment" } },
                 { fps: 10, qrbox: { width: 200, height: 200 } },
