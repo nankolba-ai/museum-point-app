@@ -2,8 +2,8 @@
 <html lang="th">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>พิพิธภัณฑ์การเรียนรู้ - งานนวัตกรรมในความทรงจำ</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>พิพิธภัณฑ์การเกษตรเฉลิมพระเกียรติฯ ปทุมธานี - งานมหกรรมในความทรงจำ</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Lucide Icons -->
@@ -14,7 +14,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <!-- Google Fonts: Prompt -->
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    
+
     <style>
         body {
             font-family: 'Prompt', sans-serif;
@@ -67,7 +67,7 @@
 
     <!-- Container Screen for Mobile App Layout -->
     <div class="w-full max-w-md bg-gradient-to-b from-sky-200 via-sky-100 to-slate-50 min-h-screen relative shadow-2xl overflow-x-hidden flex flex-col pb-12 border-x border-white/40">
-        
+
         <!-- Background Clouds (Decorative & Non-blocking) -->
         <div class="cloud-decor top-2 -left-10 opacity-70 scale-75">
             <div class="w-24 h-8 bg-white rounded-full relative">
@@ -90,7 +90,7 @@
             <h1 id="app-header-title" onclick="handleTitleClick()" class="text-xl font-extrabold text-sky-950 drop-shadow-sm cursor-pointer active:opacity-80">
                 งานนวัตกรรม "ในความทรงจำ"
             </h1>
-            
+
             <!-- Date Banner -->
             <div class="mt-3 inline-flex items-center gap-2.5 bg-white/80 backdrop-blur-md px-4 py-1.5 rounded-full border border-white text-xs font-bold text-sky-900 shadow-sm">
                 <span class="flex items-center gap-1"><i data-lucide="calendar" class="w-3.5 h-3.5 text-sky-600"></i> 10-13 ตุลาคม 2569</span>
@@ -101,7 +101,7 @@
 
         <!-- Main Content Area -->
         <main class="px-5 mt-5 flex-1 relative z-10 space-y-4">
-            
+
             <!-- Score Card (Hero Section) -->
             <div class="glass-card rounded-3xl p-5 relative overflow-hidden text-center border-2 border-white/90">
                 <div class="flex justify-between items-center mb-1">
@@ -115,7 +115,7 @@
                 <div class="my-3 relative flex items-center justify-center">
                     <div class="absolute left-8 top-1 w-12 h-6 bg-white/80 rounded-full blur-[1px] -z-0"></div>
                     <div class="absolute right-12 bottom-1 w-10 h-5 bg-white/80 rounded-full blur-[1px] -z-0"></div>
-                    
+
                     <span id="user-score" class="text-7xl font-black text-sky-500 drop-shadow-[0_6px_0_rgba(14,116,144,0.35)] z-10 mr-2 tracking-tight">0</span>
                     <span class="text-lg font-extrabold text-sky-900 self-end mb-2 z-10">คะแนน</span>
                 </div>
@@ -140,7 +140,7 @@
                     </div>
                     <div class="text-left">
                         <h2 class="font-extrabold text-base leading-tight text-slate-900">สแกน QR Code เช็คอิน</h2>
-                        <p class="text-xs text-slate-800 font-medium">กดเพื่อเปิดกล้องสแกนรับ 5 คะแนนต่อจุด</p>
+                        <p class="text-xs text-slate-800 font-medium">กดเพื่อเปิดกล้องสแกนรับคะแนนตามจุด</p>
                     </div>
                 </div>
                 <div class="w-9 h-9 bg-black/10 rounded-full flex items-center justify-center">
@@ -160,7 +160,7 @@
 
             <!-- TAB 1: CHECK-IN STATIONS & HISTORY -->
             <div id="tab-content-checkin" class="space-y-4">
-                
+
                 <!-- Checkin Points List Card -->
                 <div class="glass-card rounded-2xl p-4 border border-sky-100/80">
                     <div class="flex justify-between items-center mb-3 pb-2 border-b border-sky-100">
@@ -195,7 +195,7 @@
 
             <!-- TAB 2: REWARD CATALOG & REDEMPTION -->
             <div id="tab-content-reward" class="space-y-4 hidden">
-                
+
                 <!-- Reward Booth Banner Card -->
                 <div class="glass-card rounded-2xl p-4 border border-amber-200/80 bg-gradient-to-r from-amber-50/70 to-orange-50/40">
                     <div class="flex items-center gap-3">
@@ -290,7 +290,7 @@
             </div>
 
             <form id="survey-form" onsubmit="handleSurveySubmit(event)" class="space-y-3.5 overflow-y-auto flex-1 pr-1 text-left text-xs">
-                
+
                 <!-- 1. Name -->
                 <div>
                     <label class="font-bold text-slate-700 block mb-1">1. ชื่อ-นามสกุล <span class="text-red-500">*</span></label>
@@ -380,10 +380,10 @@
             <div class="w-14 h-14 bg-gradient-to-tr from-amber-400 to-yellow-300 text-slate-900 rounded-2xl flex items-center justify-center mx-auto mb-2 shadow-lg">
                 <i data-lucide="gift" class="w-7 h-7"></i>
             </div>
-            
+
             <h3 class="font-black text-lg text-slate-900">QR Code สำหรับรับของรางวัล</h3>
             <p id="redeem-reward-title" class="text-xs font-bold text-amber-600 mt-0.5 mb-2"></p>
-            
+
             <!-- QR Container -->
             <div id="qrcode-container" class="flex justify-center p-4 bg-slate-50 rounded-2xl border border-slate-200 my-2 shadow-inner"></div>
 
@@ -432,17 +432,17 @@
 
             <!-- Admin Sub Navigation Tabs -->
             <div class="grid grid-cols-2 gap-2 mb-4 bg-slate-100 p-1 rounded-xl text-xs font-bold">
-                <button onclick="switchAdminTab('create')" id="atab-create" class="py-2 rounded-lg bg-white shadow-sm text-sky-600">สร้าง QR Code จุดเช็คอิน</button>
+                <button onclick="switchAdminTab('create')" id="atab-create" class="py-2 rounded-lg bg-white shadow-sm text-sky-600">จัดการจุดเช็คอิน</button>
                 <button onclick="switchAdminTab('scan')" id="atab-scan" class="py-2 rounded-lg text-slate-600">สแกนยืนยันรางวัล</button>
             </div>
 
-            <!-- Admin Tab 1: Create QR Code -->
+            <!-- Admin Tab 1: Manage Check-in Points -->
             <div id="admin-tab-create" class="space-y-3 overflow-y-auto flex-1 pr-1 text-xs">
                 <div class="bg-sky-50 p-3 rounded-xl border border-sky-100 text-sky-900 space-y-1">
-                    <p class="font-bold flex items-center gap-1"><i data-lucide="info" class="w-3.5 h-3.5 text-sky-600"></i> คำแนะนำสร้างจุดเช็คอิน:</p>
-                    <p>1. กรอก ID และ ชื่อจุดเช็คอินใหม่</p>
-                    <p>2. กดปุ่ม "สร้างและบันทึก QR Code"</p>
-                    <p>3. จุดใหม่จะไปปรากฏในแทป "จุดเช็คอิน" ของผู้เล่นโดยอัตโนมัติ</p>
+                    <p class="font-bold flex items-center gap-1"><i data-lucide="info" class="w-3.5 h-3.5 text-sky-600"></i> คำแนะนำจัดการจุดเช็คอิน:</p>
+                    <p>1. กรอก ID, ชื่อจุด และคะแนนที่จะได้รับ แล้วกด "เพิ่มจุดเช็คอิน"</p>
+                    <p>2. กดปุ่ม "แก้ไข" ในรายการด้านล่างเพื่อแก้ไขจุดที่มีอยู่</p>
+                    <p>3. กดปุ่ม "ลบ" เพื่อลบจุดเช็คอิน ระบบจะอัปเดตทันที</p>
                 </div>
 
                 <div>
@@ -451,18 +451,38 @@
                 </div>
 
                 <div>
-                    <label class="font-bold text-slate-700 block mb-1">ชื่อจุดเช็คอินใหม่</label>
+                    <label class="font-bold text-slate-700 block mb-1">ชื่อจุดเช็คอิน</label>
                     <input type="text" id="new-location-name" placeholder="เช่น โซนที่ 4: นวัตกรรมอวกาศไทย" class="w-full border rounded-xl py-2 px-3 text-xs focus:ring-2 focus:ring-sky-400 outline-none">
                 </div>
 
-                <button onclick="generateAdminQR()" class="w-full bg-sky-600 hover:bg-sky-700 text-white font-bold text-xs py-2.5 rounded-xl shadow">
-                    สร้างและเพิ่มจุดเช็คอิน
-                </button>
+                <div>
+                    <label class="font-bold text-slate-700 block mb-1">คะแนนที่จะได้รับ (แต้ม)</label>
+                    <input type="number" id="new-location-points" min="0" step="1" value="5" placeholder="เช่น 5" class="w-full border rounded-xl py-2 px-3 text-xs focus:ring-2 focus:ring-sky-400 outline-none font-mono">
+                </div>
+
+                <div class="flex gap-2">
+                    <button onclick="submitCheckinPointForm()" id="location-form-submit-btn" class="flex-1 bg-sky-600 hover:bg-sky-700 text-white font-bold text-xs py-2.5 rounded-xl shadow">
+                        เพิ่มจุดเช็คอิน
+                    </button>
+                    <button onclick="cancelEditLocation()" id="location-form-cancel-btn" class="hidden bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold text-xs py-2.5 px-4 rounded-xl shadow">
+                        ยกเลิก
+                    </button>
+                </div>
 
                 <div id="generated-qr-result" class="hidden text-center p-4 bg-slate-50 border rounded-2xl">
                     <p id="generated-name" class="font-bold text-xs text-slate-800 mb-2"></p>
                     <div id="admin-qrcode" class="flex justify-center mb-2"></div>
                     <p class="text-[10px] text-slate-400">สามารถพิมพ์หรือบันทึกภาพเพื่อนำไปติดตั้ง ณ จุดกิจกรรม</p>
+                </div>
+
+                <!-- Existing Locations Management List -->
+                <div class="pt-2 border-t border-slate-100 space-y-2">
+                    <h4 class="font-extrabold text-slate-700 flex items-center gap-1.5 pt-2">
+                        <i data-lucide="list" class="w-3.5 h-3.5 text-sky-600"></i> จุดเช็คอินทั้งหมด (<span id="admin-location-count">0</span>)
+                    </h4>
+                    <div id="admin-locations-list" class="space-y-2 max-h-56 overflow-y-auto pr-1">
+                        <!-- Dynamic admin location management rows -->
+                    </div>
                 </div>
             </div>
 
@@ -487,10 +507,11 @@
         // State Management
         let userPoints = 0;
         let scannedPoints = [];
-        let html5QrcodeScanner = null;
-        let adminScanner = null;
+        let playerScanner = null;   // Html5Qrcode instance (player)
+        let adminScanner = null;    // Html5Qrcode instance (admin)
         let selectedRewardForSurvey = null;
         let titleClickCounter = 0;
+        let editingLocationId = null; // Tracks which location is currently being edited in Admin
 
         // Reward Items Catalog
         const rewardCatalog = [
@@ -500,11 +521,11 @@
             { id: 'REWARD_SUPERNOVA', name: 'ซุปเปอร์โนว่า (Supernova)', points: 300, icon: 'sparkles', color: 'from-purple-500 to-pink-500' }
         ];
 
-        // Default Check-in Points (Dynamic array expandable by admin)
+        // Default Check-in Points (Dynamic array expandable/editable by admin). Each has its own points value.
         let checkinLocations = [
-            { id: 'POINT_01', name: 'โซนที่ 1: นวัตกรรมแห่งความทรงจำ' },
-            { id: 'POINT_02', name: 'โซนที่ 2: นิทรรศการภาพถ่ายโบราณ' },
-            { id: 'POINT_03', name: 'โซนที่ 3: หอศิลป์ประวัติศาสตร์' }
+            { id: 'POINT_01', name: 'โซนที่ 1: นวัตกรรมแห่งความทรงจำ', points: 5 },
+            { id: 'POINT_02', name: 'โซนที่ 2: นิทรรศการภาพถ่ายโบราณ', points: 5 },
+            { id: 'POINT_03', name: 'โซนที่ 3: หอศิลป์ประวัติศาสตร์', points: 5 }
         ];
 
         // Startup initialization
@@ -515,8 +536,6 @@
                 document.getElementById('modal-admin-panel').classList.remove('hidden');
             }
 
-            renderCheckinPoints();
-            renderRewardCatalog();
             updateUI();
         };
 
@@ -537,7 +556,7 @@
             document.getElementById('history-count').innerText = `${scannedPoints.length} รายการ`;
 
             // Progress percentage
-            const percentage = checkinLocations.length > 0 
+            const percentage = checkinLocations.length > 0
                 ? Math.min((scannedPoints.length / checkinLocations.length) * 100, 100)
                 : 0;
             document.getElementById('progress-bar').style.width = `${percentage}%`;
@@ -552,6 +571,7 @@
             renderCheckinPoints();
             renderRewardCatalog();
             renderHistory();
+            renderAdminLocationsList();
             lucide.createIcons();
         }
 
@@ -575,12 +595,17 @@
             }
         }
 
-        // Render Check-in Points in Tab 1
+        // Render Check-in Points in Tab 1 (Player-facing)
         function renderCheckinPoints() {
             const container = document.getElementById('checkin-points-list');
             const progressTag = document.getElementById('checkin-progress-tag');
-            
+
             progressTag.innerText = `${scannedPoints.length}/${checkinLocations.length} สแกนแล้ว`;
+
+            if (checkinLocations.length === 0) {
+                container.innerHTML = `<p class="text-xs text-slate-400 text-center py-3">ยังไม่มีจุดเช็คอินในระบบ</p>`;
+                return;
+            }
 
             container.innerHTML = checkinLocations.map((loc, idx) => {
                 const isScanned = scannedPoints.some(p => p.id === loc.id);
@@ -592,11 +617,11 @@
                             </div>
                             <div>
                                 <h4 class="text-xs font-bold text-slate-800">${loc.name}</h4>
-                                <p class="text-[10px] text-slate-400 font-mono">${loc.id}</p>
+                                <p class="text-[10px] text-slate-400 font-mono">${loc.id} · ${loc.points ?? 5} คะแนน</p>
                             </div>
                         </div>
-                        ${isScanned 
-                            ? '<span class="text-[10px] bg-emerald-500 text-white px-2.5 py-1 rounded-full font-extrabold flex items-center gap-1 shadow-sm"><i data-lucide="check" class="w-3 h-3"></i> สแกนแล้ว</span>' 
+                        ${isScanned
+                            ? '<span class="text-[10px] bg-emerald-500 text-white px-2.5 py-1 rounded-full font-extrabold flex items-center gap-1 shadow-sm"><i data-lucide="check" class="w-3 h-3"></i> สแกนแล้ว</span>'
                             : '<span class="text-[10px] bg-slate-100 text-slate-500 px-2.5 py-1 rounded-full font-bold">⭕ ยังไม่ได้สแกน</span>'}
                     </div>
                 `;
@@ -628,7 +653,7 @@
                                 <p class="text-[10px] text-slate-400">${item.time}</p>
                             </div>
                         </div>
-                        <span class="text-xs font-extrabold text-emerald-600 shrink-0">+5 คะแนน</span>
+                        <span class="text-xs font-extrabold text-emerald-600 shrink-0">+${item.pointsEarned ?? 5} คะแนน</span>
                     </div>
                 `).join('');
             }
@@ -655,10 +680,10 @@
                             </div>
                         </div>
 
-                        <button onclick="openSurveyModal('${item.id}')" ${canAfford ? '' : 'disabled'} 
+                        <button onclick="openSurveyModal('${item.id}')" ${canAfford ? '' : 'disabled'}
                             class="py-2 px-3.5 rounded-xl font-bold text-xs shadow transition flex items-center gap-1 shrink-0 ${
-                                canAfford 
-                                ? 'bg-amber-500 hover:bg-amber-600 text-white cursor-pointer active:scale-95' 
+                                canAfford
+                                ? 'bg-amber-500 hover:bg-amber-600 text-white cursor-pointer active:scale-95'
                                 : 'bg-slate-200 text-slate-400 cursor-not-allowed shadow-none'
                             }">
                             <span>${canAfford ? 'แลกรางวัล' : 'คะแนนไม่พอ'}</span>
@@ -668,16 +693,40 @@
             }).join('');
         }
 
-        // Camera Scanner Logic for Player
+        // ===================== CAMERA SCANNER LOGIC (BACK CAMERA ONLY) =====================
+        // Uses the lower-level Html5Qrcode API (instead of Html5QrcodeScanner) so we can force
+        // facingMode: "environment" and never show a front-camera / camera-picker option.
+
         function startScanner() {
             document.getElementById('modal-scanner').classList.remove('hidden');
-            html5QrcodeScanner = new Html5QrcodeScanner("reader", { fps: 10, qrbox: { width: 220, height: 220 } });
-            html5QrcodeScanner.render(onScanSuccess, onScanFailure);
+            playerScanner = new Html5Qrcode("reader");
+            playerScanner.start(
+                { facingMode: { exact: "environment" } },
+                { fps: 10, qrbox: { width: 220, height: 220 } },
+                onScanSuccess,
+                onScanFailure
+            ).catch(() => {
+                // Fallback for devices that don't support the "exact" constraint
+                playerScanner.start(
+                    { facingMode: "environment" },
+                    { fps: 10, qrbox: { width: 220, height: 220 } },
+                    onScanSuccess,
+                    onScanFailure
+                ).catch(err => {
+                    alert('ไม่สามารถเปิดกล้องหลังได้ กรุณาตรวจสอบการอนุญาตใช้กล้องของอุปกรณ์\n' + err);
+                    closeScanner();
+                });
+            });
         }
 
         function closeScanner() {
-            if (html5QrcodeScanner) {
-                html5QrcodeScanner.clear();
+            if (playerScanner) {
+                playerScanner.stop().then(() => {
+                    playerScanner.clear();
+                    playerScanner = null;
+                }).catch(() => {
+                    playerScanner = null;
+                });
             }
             document.getElementById('modal-scanner').classList.add('hidden');
         }
@@ -685,19 +734,21 @@
         function onScanSuccess(decodedText) {
             closeScanner();
             const point = checkinLocations.find(p => p.id === decodedText || p.name === decodedText);
-            
+
             if (point) {
                 if (scannedPoints.some(p => p.id === point.id)) {
                     alert('คุณได้ทำการสแกนเช็คอินจุดนี้ไปแล้วครับ!');
                 } else {
+                    const earnedPoints = Number(point.points ?? 5);
                     scannedPoints.push({
                         id: point.id,
                         name: point.name,
+                        pointsEarned: earnedPoints,
                         time: new Date().toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' })
                     });
-                    userPoints += 5;
+                    userPoints += earnedPoints;
                     updateUI();
-                    alert(`🎉 เช็คอินสำเร็จ!\nคุณได้รับ +5 คะแนน จาก: ${point.name}`);
+                    alert(`🎉 เช็คอินสำเร็จ!\nคุณได้รับ +${earnedPoints} คะแนน จาก: ${point.name}`);
                 }
             } else {
                 alert('⚠️ QR Code ไม่ถูกต้อง หรือไม่ตรงกับจุดเช็คอินในระบบ');
@@ -776,7 +827,7 @@
         // Display Redemption QR Code Screen for Admin Verification
         function displayRedemptionQR(reward) {
             const code = 'CLAIM-' + reward.id + '-' + Math.floor(100000 + Math.random() * 900000);
-            
+
             document.getElementById('redeem-reward-title').innerText = `${reward.name} (${reward.points} คะแนน)`;
             document.getElementById('redeem-code-txt').innerText = code;
 
@@ -809,13 +860,15 @@
                 closeAdminAuth();
                 document.getElementById('admin-pass').value = '';
                 document.getElementById('modal-admin-panel').classList.remove('hidden');
+                renderAdminLocationsList();
             } else {
                 alert('รหัสผ่านแอดมินไม่ถูกต้อง');
             }
         }
         function closeAdminPanel() {
             document.getElementById('modal-admin-panel').classList.add('hidden');
-            if (adminScanner) adminScanner.clear();
+            stopAdminScanner();
+            cancelEditLocation();
         }
 
         // Switch Sub-tabs inside Admin Panel
@@ -825,7 +878,7 @@
                 document.getElementById('admin-tab-scan').classList.add('hidden');
                 document.getElementById('atab-create').className = "py-2 rounded-lg bg-white shadow-sm text-sky-600 font-bold";
                 document.getElementById('atab-scan').className = "py-2 rounded-lg text-slate-600 font-bold";
-                if (adminScanner) adminScanner.clear();
+                stopAdminScanner();
             } else {
                 document.getElementById('admin-tab-create').classList.add('hidden');
                 document.getElementById('admin-tab-scan').classList.remove('hidden');
@@ -834,10 +887,59 @@
             }
         }
 
-        // Admin Function: Create new custom Check-in QR Code dynamically
+        // ===================== ADMIN: MANAGE CHECK-IN POINTS (ADD / EDIT / DELETE) =====================
+
+        // Render the admin-facing list of check-in points with Edit/Delete controls
+        function renderAdminLocationsList() {
+            const container = document.getElementById('admin-locations-list');
+            const countEl = document.getElementById('admin-location-count');
+            if (!container || !countEl) return; // Panel not yet in DOM on first load, safe guard
+
+            countEl.innerText = checkinLocations.length;
+
+            if (checkinLocations.length === 0) {
+                container.innerHTML = `<p class="text-[11px] text-slate-400 text-center py-3">ยังไม่มีจุดเช็คอินในระบบ</p>`;
+                return;
+            }
+
+            container.innerHTML = checkinLocations.map((loc, idx) => `
+                <div class="flex items-center justify-between gap-2 p-2.5 rounded-xl border ${editingLocationId === loc.id ? 'bg-amber-50 border-amber-300' : 'bg-white border-slate-200'} shadow-sm">
+                    <div class="flex items-center gap-2 min-w-0">
+                        <div class="w-6 h-6 rounded-lg bg-sky-100 text-sky-700 flex items-center justify-center text-[10px] font-black shrink-0">${idx + 1}</div>
+                        <div class="min-w-0">
+                            <p class="text-[11px] font-bold text-slate-800 truncate">${loc.name}</p>
+                            <p class="text-[10px] text-slate-400 font-mono">${loc.id} · ${loc.points ?? 5} คะแนน</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-1 shrink-0">
+                        <button onclick="startEditLocation('${loc.id}')" class="w-7 h-7 flex items-center justify-center bg-sky-100 hover:bg-sky-200 text-sky-700 rounded-lg">
+                            <i data-lucide="pencil" class="w-3.5 h-3.5"></i>
+                        </button>
+                        <button onclick="deleteCheckinPoint('${loc.id}')" class="w-7 h-7 flex items-center justify-center bg-red-100 hover:bg-red-200 text-red-600 rounded-lg">
+                            <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+
+            lucide.createIcons();
+        }
+
+        // Add or Update depending on whether we are in "edit mode"
+        function submitCheckinPointForm() {
+            if (editingLocationId) {
+                updateCheckinPoint();
+            } else {
+                generateAdminQR();
+            }
+        }
+
+        // Create a brand-new check-in point (also generates a printable QR)
         function generateAdminQR() {
             let idInput = document.getElementById('new-location-id').value.trim();
             const nameInput = document.getElementById('new-location-name').value.trim();
+            const pointsInput = parseInt(document.getElementById('new-location-points').value, 10);
+            const pointsVal = Number.isFinite(pointsInput) && pointsInput >= 0 ? pointsInput : 5;
 
             if (!nameInput) {
                 alert('กรุณากรอกชื่อจุดเช็คอิน');
@@ -854,10 +956,10 @@
                 return;
             }
 
-            const newPoint = { id: idInput, name: nameInput };
+            const newPoint = { id: idInput, name: nameInput, points: pointsVal };
             checkinLocations.push(newPoint);
 
-            document.getElementById('generated-name').innerText = `${idInput}: ${nameInput}`;
+            document.getElementById('generated-name').innerText = `${idInput}: ${nameInput} (${pointsVal} คะแนน)`;
             const qrContainer = document.getElementById('admin-qrcode');
             qrContainer.innerHTML = '';
             new QRCode(qrContainer, {
@@ -867,22 +969,125 @@
             });
 
             document.getElementById('generated-qr-result').classList.remove('hidden');
-            document.getElementById('new-location-id').value = '';
-            document.getElementById('new-location-name').value = '';
-            
+            clearLocationForm();
+
             updateUI();
-            alert(`เพิ่มจุดเช็คอิน "${nameInput}" เรียบร้อยแล้ว`);
+            alert(`เพิ่มจุดเช็คอิน "${nameInput}" (${pointsVal} คะแนน) เรียบร้อยแล้ว`);
         }
 
-        // Admin Function: Scan Player Claim QR Code
+        // Populate the form with an existing point's data so admin can edit it
+        function startEditLocation(id) {
+            const loc = checkinLocations.find(l => l.id === id);
+            if (!loc) return;
+
+            editingLocationId = id;
+            document.getElementById('new-location-id').value = loc.id;
+            document.getElementById('new-location-id').disabled = true; // ID stays fixed while editing
+            document.getElementById('new-location-name').value = loc.name;
+            document.getElementById('new-location-points').value = loc.points ?? 5;
+
+            document.getElementById('location-form-submit-btn').innerText = 'บันทึกการแก้ไข';
+            document.getElementById('location-form-cancel-btn').classList.remove('hidden');
+            document.getElementById('generated-qr-result').classList.add('hidden');
+
+            renderAdminLocationsList();
+        }
+
+        // Save changes made to an existing check-in point
+        function updateCheckinPoint() {
+            const loc = checkinLocations.find(l => l.id === editingLocationId);
+            if (!loc) {
+                cancelEditLocation();
+                return;
+            }
+
+            const nameInput = document.getElementById('new-location-name').value.trim();
+            const pointsInput = parseInt(document.getElementById('new-location-points').value, 10);
+            const pointsVal = Number.isFinite(pointsInput) && pointsInput >= 0 ? pointsInput : 5;
+
+            if (!nameInput) {
+                alert('กรุณากรอกชื่อจุดเช็คอิน');
+                return;
+            }
+
+            loc.name = nameInput;
+            loc.points = pointsVal;
+
+            cancelEditLocation();
+            updateUI();
+            alert('บันทึกการแก้ไขจุดเช็คอินเรียบร้อยแล้ว');
+        }
+
+        // Cancel edit mode and reset the form back to "add new" mode
+        function cancelEditLocation() {
+            editingLocationId = null;
+            document.getElementById('new-location-id').disabled = false;
+            clearLocationForm();
+            document.getElementById('location-form-submit-btn').innerText = 'เพิ่มจุดเช็คอิน';
+            document.getElementById('location-form-cancel-btn').classList.add('hidden');
+            renderAdminLocationsList();
+        }
+
+        function clearLocationForm() {
+            document.getElementById('new-location-id').value = '';
+            document.getElementById('new-location-name').value = '';
+            document.getElementById('new-location-points').value = '5';
+        }
+
+        // Delete a check-in point — updates player-facing data immediately
+        function deleteCheckinPoint(id) {
+            const loc = checkinLocations.find(l => l.id === id);
+            if (!loc) return;
+
+            if (!confirm(`ยืนยันการลบจุดเช็คอิน "${loc.name}" ใช่หรือไม่?`)) return;
+
+            checkinLocations = checkinLocations.filter(l => l.id !== id);
+
+            // If admin happened to be editing this exact point, reset the form
+            if (editingLocationId === id) {
+                cancelEditLocation();
+            }
+
+            updateUI(); // Immediately refreshes player-facing checkin list, progress bar & totals
+            alert(`ลบจุดเช็คอิน "${loc.name}" เรียบร้อยแล้ว`);
+        }
+
+        // ===================== ADMIN SCANNER (BACK CAMERA ONLY) =====================
         function startAdminScanner() {
-            adminScanner = new Html5QrcodeScanner("admin-scanner-box", { fps: 10, qrbox: { width: 200, height: 200 } });
-            adminScanner.render(onAdminScanSuccess, () => {});
+            if (adminScanner) return; // already running
+            adminScanner = new Html5Qrcode("admin-scanner-box");
+            adminScanner.start(
+                { facingMode: { exact: "environment" } },
+                { fps: 10, qrbox: { width: 200, height: 200 } },
+                onAdminScanSuccess,
+                () => {}
+            ).catch(() => {
+                adminScanner.start(
+                    { facingMode: "environment" },
+                    { fps: 10, qrbox: { width: 200, height: 200 } },
+                    onAdminScanSuccess,
+                    () => {}
+                ).catch(err => {
+                    alert('ไม่สามารถเปิดกล้องหลังได้ กรุณาตรวจสอบการอนุญาตใช้กล้องของอุปกรณ์\n' + err);
+                    adminScanner = null;
+                });
+            });
+        }
+
+        function stopAdminScanner() {
+            if (adminScanner) {
+                adminScanner.stop().then(() => {
+                    adminScanner.clear();
+                    adminScanner = null;
+                }).catch(() => {
+                    adminScanner = null;
+                });
+            }
         }
 
         function onAdminScanSuccess(decodedText) {
             if (decodedText.startsWith('CLAIM-')) {
-                if (adminScanner) adminScanner.clear();
+                stopAdminScanner();
 
                 const parts = decodedText.split('|');
                 const codeRef = parts[0];
